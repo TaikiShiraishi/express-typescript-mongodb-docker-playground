@@ -1,15 +1,18 @@
-version: '3'
+version: "3"
 services:
   app:
     # 起動イメージ
     image: node:16
+    # コンテナ名
+    container_name: app-container
     # 環境変数
     environment:
       - DEBUG=app:*
+    # 仮想端末を利用するフラグ
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
-      - '3000:3000'
+      - 3000:3000
     # ホスト側のsrcをコンテナのappにマウント
     volumes:
       - ./src:/app
@@ -17,3 +20,54 @@ services:
     working_dir: /app
     # 起動後に実行するコマンド
     command: sh -c 'npx tsc; npm run dev'
+    # 接続する仮想ネットワーク
+    networks:
+      - app-network
+    # 依存先サービスを指定。
+    # docker-compose up したときに mongo が先に起動/終了する
+    depends_on:
+      - mongo
+  mongo:
+    # 起動イメージ
+    image: mongo
+    # コンテナ名
+    container_name: mongo-container
+    # コンテナ起動失敗時の再起動のポリシー
+    restart: always
+    ports:
+      - 27017:27017
+    # 環境変数
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      # MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    # ホスト側のdata/dbをコンテナの/data/dbにマウント
+    volumes:
+      - ./data/db:/data/db
+    # 起動時に実行するコマンド
+    command:
+      - mongod
+    # 接続するネットワークを指定する
+    networks:
+      - app-network
+  mongo-expres:
+    image: mongo-express
+    container_name: mong-express-container
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+    networks:
+      - app-network
+    depends_on:
+      - mongo
+# ネットワークの設定
+networks:
+  # 仮想の"app-network"を作成して他のservice間を接続できるようにする
+  app-network:
+    # docker-compose upではネットワークを作成しない。事前に作成されている想定のフラグ
+    # $ docker network create app-network
+    external: true
