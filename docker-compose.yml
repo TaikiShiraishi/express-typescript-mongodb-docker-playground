@@ -7,7 +7,10 @@ services:
     container_name: app-container
     # 環境変数
     environment:
-      - DEBUG=app:*
+      DEBUG: app:*
+      MONGO_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_DATABASE: ${MONGO_INITDB_DATABASE}
     # 仮想端末を利用するフラグ
     tty: true
     # ホスト側のポート：コンテナのポート
@@ -40,10 +43,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      # MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     # ホスト側のdata/dbをコンテナの/data/dbにマウント
     volumes:
       - ./data/db:/data/db
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     # 起動時に実行するコマンド
     command:
       - mongod
@@ -59,7 +63,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}
     networks:
       - app-network
     depends_on:
