@@ -1,6 +1,9 @@
 [
   {
     "username": "sample man",
-    "message": "Hello World"
+    "message": "Hello World",
+    "date": {
+      "$date": "2018-11-10T22:26:12.111Z"
+    }
   }
 ]
