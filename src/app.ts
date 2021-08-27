@@ -1,17 +1,29 @@
+import express from 'express'
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
+import { connect } from 'mongoose'
+import logger from 'morgan'
+import cookieParser from 'cookie-parser'
+import createError from 'http-errors'
+import path from 'path'
+import indexRouter from './routes/index'
 
-const createError = require('http-errors')
-const express = require('express')
-const path = require('path')
-const cookieParser = require('cookie-parser')
-const logger = require('morgan')
-
-const indexRouter = require('./routes')
 const usersRouter = require('./routes/users')
 
 const app = express()
+
+// connect MongoDB
+connect(
+  `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@mongo:27017/${process.env.MONGO_DATABASE}`,
+  function (err) {
+    if (err) {
+      console.error(err)
+    } else {
+      console.log('successfully connected to MongoDB.')
+    }
+  }
+)
 
 // Swagger
 const options: swaggerJSDoc.Options = {
@@ -35,6 +47,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join('public')))
 
+// routing setting
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
