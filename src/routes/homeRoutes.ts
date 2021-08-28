@@ -1,4 +1,5 @@
 import express from 'express'
+import { MessageModel } from '../models/Message'
 
 const router = express.Router()
 
@@ -14,7 +15,10 @@ const router = express.Router()
  *        description: タイトル
  */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' })
+  MessageModel.find({}, function (err, msgs) {
+    if (err) throw err
+    res.render('index', { messages: msgs })
+  })
 })
 
 export default router
