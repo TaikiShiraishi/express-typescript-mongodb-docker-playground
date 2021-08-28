@@ -27,3 +27,4 @@ yarn-error.log*
 
 /data
 .env
+/src/public/images/update
