@@ -5,10 +5,9 @@ import { connect } from 'mongoose'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import createError from 'http-errors'
+import bodyParser from 'body-parser'
 import path from 'path'
-import indexRouter from './routes/index'
-
-const usersRouter = require('./routes/users')
+import router from './routes/index'
 
 const app = express()
 
@@ -42,11 +41,15 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
 app.use(express.static(path.join('public')))
 
-// routing setting
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
+// routing setup
+app.use('/', router)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
