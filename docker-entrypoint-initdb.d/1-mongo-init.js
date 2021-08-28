@@ -3,11 +3,11 @@ var user = {
   pwd: "mongo",
   roles: [
     {
-      role: "dbOwner",
+      role: "readWrite",
       db: "chatapp",
     },
   ],
 };
 
 db.createUser(user);
-db.createCollection("message");
+db.createCollection("messages");

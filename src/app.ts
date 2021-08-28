@@ -1,5 +1,4 @@
-import express from 'express'
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
+import express, { ErrorRequestHandler } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import { connect } from 'mongoose'
@@ -14,16 +13,13 @@ const usersRouter = require('./routes/users')
 const app = express()
 
 // connect MongoDB
-connect(
-  `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@mongo:27017/${process.env.MONGO_DATABASE}`,
-  function (err) {
-    if (err) {
-      console.error(err)
-    } else {
-      console.log('successfully connected to MongoDB.')
-    }
+connect(`mongodb://mongo:mongo@mongo:27017/chatapp`, function (err) {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log('successfully connected to MongoDB.')
   }
-)
+})
 
 // Swagger
 const options: swaggerJSDoc.Options = {
@@ -41,6 +37,7 @@ app.use('/spec', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)))
 app.set('views', path.join('views'))
 app.set('view engine', 'pug')
 
+// middleware setup
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -52,7 +49,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
 // catch 404 and forward to error handler
-app.use(function (req: Request, res: Response, next: NextFunction) {
+app.use(function (req, res, next) {
   next(createError(404))
 })
 

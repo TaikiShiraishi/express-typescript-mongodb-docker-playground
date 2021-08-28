@@ -15,7 +15,8 @@ services:
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
-      - 3000:3000
+      - "3000:3000"
+      - "3333:3333"
     # ホスト側のsrcをコンテナのappにマウント
     volumes:
       - ./src:/app
@@ -38,7 +39,7 @@ services:
     # コンテナ起動失敗時の再起動のポリシー
     restart: always
     ports:
-      - 27017:27017
+      - "27017:27017"
     # 環境変数
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
@@ -59,11 +60,11 @@ services:
     container_name: mong-express-container
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
     networks:
       - app-network
     depends_on:
