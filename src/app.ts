@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 import createError from 'http-errors'
 import bodyParser from 'body-parser'
 import path from 'path'
-import router from './routes/index'
+import router from './routes'
 
 const app = express()
 
