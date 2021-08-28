@@ -12,4 +12,4 @@ const MessageSchema = new Schema<Message>({
   date: { type: Date, default: new Date() },
 })
 
-export const messageModel = model<Message>('Message', MessageSchema)
+export const MessageModel = model<Message>('Message', MessageSchema)
