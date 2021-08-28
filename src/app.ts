@@ -6,6 +6,7 @@ import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import createError from 'http-errors'
 import bodyParser from 'body-parser'
+import fileUpload from 'express-fileupload'
 import path from 'path'
 import router from './routes'
 
@@ -46,6 +47,7 @@ app.use(
     extended: true,
   })
 )
+app.use(fileUpload())
 app.use(express.static(path.join('public')))
 
 // routing setup
