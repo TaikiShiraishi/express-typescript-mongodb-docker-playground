@@ -8,6 +8,8 @@ block content
         h2 #{msg.username}
         time #{msg.date}
         p #{msg.message}
+      if msg.image_path
+        img(src=msg.image_path)
 
   div
     a(href="/update") 投稿画面へ
