@@ -1,5 +1,5 @@
 import express from 'express'
-import { MessageModel } from '../schema/Message'
+import { MessageModel } from '../models/Message'
 
 const router = express.Router()
 
