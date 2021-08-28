@@ -9,21 +9,6 @@ var debug = require('debug')('app:server')
 var http = require('http')
 
 /**
- * User Browser Sync when development
- */
-let defaultPort = 3000
-if (process.env.NODE_ENV !== 'production') {
-  console.log('User browser sync..')
-  var browserSync = require('browser-sync')
-  defaultPort = 3333
-  browserSync({
-    open: false,
-    proxy: `localhost:${defaultPort}`,
-    file: ['./**/*.pug', './**/*.css'],
-  })
-}
-
-/**
  * Get port from environment and store in Express.
  */
 
