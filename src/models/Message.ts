@@ -8,10 +8,21 @@ interface Message {
 }
 
 const MessageSchema = new Schema<Message>({
-  username: String,
-  message: String,
-  date: { type: Date, default: new Date() },
-  image_path: String
+  username: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  message: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: new Date(),
+  },
+  image_path: String,
 })
 
 export const MessageModel = model<Message>('Message', MessageSchema)

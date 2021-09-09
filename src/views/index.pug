@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  div
+    a(href="/update") 投稿画面へ
   h1 投稿一覧
   section
     each msg in messages
@@ -11,5 +13,3 @@ block content
       if msg.image_path
         img(src=msg.image_path)
 
-  div
-    a(href="/update") 投稿画面へ

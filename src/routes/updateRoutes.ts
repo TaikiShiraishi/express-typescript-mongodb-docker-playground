@@ -1,6 +1,5 @@
 import express from 'express'
-import { MessageModel } from '../models/Message'
-import { UploadedFile } from 'express-fileupload'
+import messagesController from '../controllers/messagesController'
 
 const router = express.Router()
 
@@ -13,8 +12,8 @@ const router = express.Router()
  *      200:
  *        description: タイトル
  */
-router.get('/', function (req, res, next) {
-  res.render('update', { title: 'Express' })
+router.get('/', function (req, res) {
+  res.render('update')
 })
 
 /**
@@ -41,34 +40,9 @@ router.get('/', function (req, res, next) {
  *        format: binary
  *        description: 画像
  *    response:
- *      200:
+ *      201:
  *        description: 成功
  */
-router.post('/', function (req, res, next) {
-  if (req.files && req.files.image) {
-    const image = req.files?.image as UploadedFile
-    image.mv(`./public/images/update/${image.name}`, function (err) {
-      if (err) throw err
-      const newMessage = new MessageModel({
-        username: req.body.username,
-        message: req.body.message,
-        image_path: `/images/update/${image.name}`,
-      })
-      newMessage.save((err) => {
-        if (err) throw err
-        return res.redirect('/')
-      })
-    })
-  } else {
-    const newMessage = new MessageModel({
-      username: req.body.username,
-      message: req.body.message,
-    })
-    newMessage.save((err) => {
-      if (err) throw err
-      return res.redirect('/')
-    })
-  }
-})
+router.post('/', messagesController.doCreateMessage)
 
 export default router

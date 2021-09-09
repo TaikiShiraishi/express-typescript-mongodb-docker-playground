@@ -73,6 +73,9 @@
   "exclude": [
     "./dist",
     "node_modules",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "./coverage",
+    "./babel.config.js",
+    "./jest.config.js"
   ]
 }
